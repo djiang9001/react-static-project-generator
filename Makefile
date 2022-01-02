@@ -7,15 +7,20 @@ dev:
 	docker rmi $(IMAGE_NAME) || true
 
 # These commands are meant to be run inside of the dev container started above
-start:
+start: check-env
 	cd /app && yarn start
 
-build:
+build: check-env
 	cd /app && yarn build
 
-serve:
+serve: check-env
 	cd /app && yarn serve
 
-stage:
+stage: check-env
 	cd /app && yarn stage
 
+# Check if we are in a docker container.
+check-env:
+ifndef AM_I_IN_A_DOCKER_CONTAINER
+	$(error must run make target in docker container. Please run make dev.)
+endif
